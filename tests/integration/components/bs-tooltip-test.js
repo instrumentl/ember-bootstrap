@@ -5,8 +5,9 @@ import { render, click, focus, blur, triggerEvent, waitUntil, settled } from '@e
 import hbs from 'htmlbars-inline-precompile';
 import {
   test,
-  versionDependent,
   testRequiringFocus,
+  tooltipArrowClass,
+  tooltipPositionClass,
   visibilityClass,
   tooltipPositionClass,
   tooltipArrowClass,
@@ -385,7 +386,7 @@ module('Integration | Component | bs-tooltip', function (hooks) {
   test('should position tooltip arrow centered', async function (assert) {
     this.insertCSSRule('.margin-top { margin-top: 200px; }');
 
-    let expectedArrowPosition = versionDependent(95, 94, 94);
+    let expectedArrowPosition = 94;
     await render(hbs`
       <div id="ember-bootstrap-wormhole"></div>
       <div id="wrapper">
@@ -399,7 +400,12 @@ module('Integration | Component | bs-tooltip', function (hooks) {
     setupForPositioning();
 
     await click('#target');
-    let arrowPosition = parseInt(this.element.querySelector(`.${tooltipArrowClass()}`).style.left, 10);
+    let arrowPosition = parseInt(
+      this.element
+        .querySelector(`.${tooltipArrowClass()}`)
+        .style.transform.match(/translate(?:3d)?\(([0-9]+)px.*\)/)[1],
+      10
+    );
     assert.ok(
       Math.abs(arrowPosition - expectedArrowPosition) <= 1,
       `Expected position: ${expectedArrowPosition}, actual: ${arrowPosition}`
@@ -410,7 +416,7 @@ module('Integration | Component | bs-tooltip', function (hooks) {
     this.insertCSSRule('.margin-top { margin-top: 200px; }');
     this.insertCSSRule('#target { width: 100px; padding: 0; border: none; }');
 
-    let expectedArrowPosition = versionDependent(145, 144, 144);
+    let expectedArrowPosition = 144;
 
     await render(hbs`
       <div id="ember-bootstrap-wormhole"></div>
@@ -425,7 +431,13 @@ module('Integration | Component | bs-tooltip', function (hooks) {
     setupForPositioning('right');
 
     await click('#target');
-    let arrowPosition = parseInt(this.element.querySelector(`.${tooltipArrowClass()}`).style.left, 10);
+    let arrowPosition = parseInt(
+      this.element
+        .querySelector(`.${tooltipArrowClass()}`)
+        .style.transform.match(/translate(?:3d)?\(([0-9]+)px.*\)/)[1],
+      10
+    );
+
     assert.ok(
       Math.abs(arrowPosition - expectedArrowPosition) <= 1,
       `Expected position: ${expectedArrowPosition}, actual: ${arrowPosition}`
@@ -434,7 +446,12 @@ module('Integration | Component | bs-tooltip', function (hooks) {
     // check again to prevent regression of https://github.com/kaliber5/ember-bootstrap/issues/361
     await click('#target');
     await click('#target');
-    arrowPosition = parseInt(this.element.querySelector(`.${tooltipArrowClass()}`).style.left, 10);
+    arrowPosition = parseInt(
+      this.element
+        .querySelector(`.${tooltipArrowClass()}`)
+        .style.transform.match(/translate(?:3d)?\(([0-9]+)px.*\)/)[1],
+      10
+    );
     assert.ok(
       Math.abs(arrowPosition - expectedArrowPosition) <= 1,
       `Expected position: ${expectedArrowPosition}, actual: ${arrowPosition}`
