@@ -32,8 +32,8 @@
         {{yield
           (hash
             item=(ensure-safe-component (bs-default @itemComponent (component "bs-dropdown/menu/item")))
-            link-to=(ensure-safe-component (bs-default @linkToComponent (component "bs-link-to" class="dropdown-item")))
-            linkTo=(ensure-safe-component (bs-default @linkToComponent (component "bs-link-to" class="dropdown-item")))
+            link-to=(ensure-safe-component (bs-default @linkToComponent (component "bs-link-to" class=(if (macroCondition (macroGetOwnConfig "isNotBS3")) "dropdown-item"))))
+            linkTo=(ensure-safe-component (bs-default @linkToComponent (component "bs-link-to" class=(if (macroCondition (macroGetOwnConfig "isNotBS3")) "dropdown-item"))))
             divider=(ensure-safe-component (bs-default @dividerComponent (component "bs-dropdown/menu/divider")))
           )
         }}
